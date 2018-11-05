@@ -75,6 +75,18 @@ const handlers = {
 
 
     },
+    'FeelingQuestions': function() {
+        if(this.event.request.dialogState !== 'COMPLETED'){
+            this.emit(':delegate');
+        }
+        else{
+            const feelingScore = this.event.request.intent.slots.feelingRating.value;
+            this.attributes.healthscores.scores['feeling'].score = feelingScore;
+
+            this.response.speak("Feeling score successfully updated");
+            this.emit(':responseReady');
+        }
+    },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
         const reprompt = HELP_REPROMPT;
