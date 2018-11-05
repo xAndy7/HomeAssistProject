@@ -87,6 +87,19 @@ const handlers = {
             this.emit(':responseReady');
         }
     },
+    'SleepingQuestions': function() {
+        if(this.event.request.dialogState !== 'COMPLETED'){
+            this.emit(':delegate');
+        }
+        else{
+            const sleepingScore = this.event.request.intent.slots.sleepingRating.value;
+            this.attributes.healthscores.scores['sleeping'].score = sleepingScore;
+
+            this.response.speak("Sleeping score successfully updated");
+            this.emit(':responseReady');
+        }
+    },
+
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
         const reprompt = HELP_REPROMPT;
