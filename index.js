@@ -99,6 +99,30 @@ const handlers = {
             this.emit(':responseReady');
         }
     },
+    'BreathingQuestions': function() {
+        if(this.event.request.dialogState !== 'COMPLETED'){
+            this.emit(':delegate');
+        }
+        else{
+            const breathingScore = this.event.request.intent.slots.breathingRating.value;
+            this.attributes.healthscores.scores['breathing'].score = breathingScore;
+
+            this.response.speak("Breathing score successfully updated");
+            this.emit(':responseReady');
+        }
+    },
+    'SwollenQuestions': function() {
+        if(this.event.request.dialogState !== 'COMPLETED'){
+            this.emit(':delegate');
+        }
+        else{
+            const swollenScore = this.event.request.intent.slots.SwollenRating.value;
+            this.attributes.healthscores.scores['swollen'].score = swollenScore;
+
+            this.response.speak("Swollen score successfully updated");
+            this.emit(':responseReady');
+        }
+    },
 
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
