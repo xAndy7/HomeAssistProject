@@ -89,51 +89,93 @@ const handlers = {
 
     },
     'FeelingQuestions': function() {
+        var id_attr = this.attributes.healthscores.patientID;
+        var feeling_attr = this.attributes.healthscores.scores['feeling'].score;
+        var sleeping_attr = this.attributes.healthscores.scores['sleeping'].score;
+        var breathing_attr = this.attributes.healthscores.scores['breathing'].score;
+        var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
+
         if(this.event.request.dialogState !== 'COMPLETED'){
             this.emit(':delegate');
         }
         else{
             const feelingScore = this.event.request.intent.slots.feelingRating.value;
             this.attributes.healthscores.scores['feeling'].score = feelingScore;
+            feeling_attr = this.attributes.healthscores.scores['feeling'].score;
 
-            this.response.speak(url2());
-            //this.response.speak("Feeling score successfully updated");
+
+            request.get(url(id_attr, feeling_attr, sleeping_attr, breathing_attr, swollen_attr), function(err, res, body) {  
+                console.log(body);
+            });
+            this.response.speak("Feeling score successfully updated");
             this.emit(':responseReady');
         }
 
     },
     'SleepingQuestions': function() {
+        var id_attr = this.attributes.healthscores.patientID;
+        var feeling_attr = this.attributes.healthscores.scores['feeling'].score;
+        var sleeping_attr = this.attributes.healthscores.scores['sleeping'].score;
+        var breathing_attr = this.attributes.healthscores.scores['breathing'].score;
+        var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
+
         if(this.event.request.dialogState !== 'COMPLETED'){
             this.emit(':delegate');
         }
         else{
             const sleepingScore = this.event.request.intent.slots.sleepingRating.value;
             this.attributes.healthscores.scores['sleeping'].score = sleepingScore;
+            sleeping_attr = this.attributes.healthscores.scores['sleeping'].score;
+            request.get(url(id_attr, feeling_attr, sleeping_attr, breathing_attr, swollen_attr), function(err, res, body) {  
+                console.log(body);
+            });
 
             this.response.speak("Sleeping score successfully updated");
             this.emit(':responseReady');
         }
     },
     'BreathingQuestions': function() {
+        var id_attr = this.attributes.healthscores.patientID;
+        var feeling_attr = this.attributes.healthscores.scores['feeling'].score;
+        var sleeping_attr = this.attributes.healthscores.scores['sleeping'].score;
+        var breathing_attr = this.attributes.healthscores.scores['breathing'].score;
+        var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
+
         if(this.event.request.dialogState !== 'COMPLETED'){
             this.emit(':delegate');
         }
         else{
             const breathingScore = this.event.request.intent.slots.breathingRating.value;
             this.attributes.healthscores.scores['breathing'].score = breathingScore;
+            breathing_attr = this.attributes.healthscores.scores['breathing'].score;
+            request.get(url(id_attr, feeling_attr, sleeping_attr, breathing_attr, swollen_attr), function(err, res, body) {  
+                console.log(body);
+            });
+
 
             this.response.speak("Breathing score successfully updated");
             this.emit(':responseReady');
         }
     },
     'SwollenQuestions': function() {
+        var id_attr = this.attributes.healthscores.patientID;
+        var feeling_attr = this.attributes.healthscores.scores['feeling'].score;
+        var sleeping_attr = this.attributes.healthscores.scores['sleeping'].score;
+        var breathing_attr = this.attributes.healthscores.scores['breathing'].score;
+        var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
+
         if(this.event.request.dialogState !== 'COMPLETED'){
             this.emit(':delegate');
         }
         else{
             const swollenScore = this.event.request.intent.slots.SwollenRating.value;
             this.attributes.healthscores.scores['swollen'].score = swollenScore;
+            swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
+            request.get(url(id_attr, feeling_attr, sleeping_attr, breathing_attr, swollen_attr), function(err, res, body) {  
+                console.log(body);
+            });
+            
             this.response.speak("Swollen score successfully updated");
             this.emit(':responseReady');
         }
