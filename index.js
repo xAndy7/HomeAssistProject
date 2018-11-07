@@ -1,6 +1,7 @@
 
 'use strict';
 const Alexa = require('alexa-sdk');
+var request = require('request');
 
 //=========================================================================================================================================
 //TODO: The items below this comment need your attention.
@@ -22,6 +23,17 @@ const STOP_MESSAGE = 'Goodbye!';
 //=========================================================================================================================================
 //Editing anything below this line might break your skill.
 //=========================================================================================================================================
+
+function url(id, feeling, sleeping, breathing, swollen) {
+    // return "http://en.wikipedia.org/w/api.php?action=query&format=json&list=search&utf8=1&srsearch=Albert+Einstein"
+    //     const guessNum = parseInt(requestEnvelope.request.intent.slots.num.value, 10);
+        return 'http://cms3.dclhealth.com/alexa_get/alexa_get_insert.php?patient_id='+id+'&response1='+feeling+'&response2='+sleeping+'&response3='+breathing+'&response4='+swollen;
+
+}
+
+function url2(){
+    return "hello world";
+}
 
 const handlers = {
     'LaunchRequest': function () {
@@ -66,9 +78,10 @@ const handlers = {
             this.attributes.healthscores.scores['breathing'].score = breathingScore;
             this.attributes.healthscores.scores['swollen'].score = swollenScore;
 
-            //var request = require('request');
-            //request.post('http://cms3.dclhealth.com/alexa_get/alexa_get_insert.php?patient_id=' + id + '&response1=' + feelingScore + '&response2' + sleepingScore);
-            
+            request.get(url(id, feelingScore, sleepingScore, breathingScore, swollenScore), function(err, res, body) {  
+                console.log(body);
+            });
+
             this.response.speak("Health Scores Recorded");
             this.emit(':responseReady');
         }
@@ -83,9 +96,11 @@ const handlers = {
             const feelingScore = this.event.request.intent.slots.feelingRating.value;
             this.attributes.healthscores.scores['feeling'].score = feelingScore;
 
-            this.response.speak("Feeling score successfully updated");
+            this.response.speak(url2());
+            //this.response.speak("Feeling score successfully updated");
             this.emit(':responseReady');
         }
+
     },
     'SleepingQuestions': function() {
         if(this.event.request.dialogState !== 'COMPLETED'){
