@@ -37,30 +37,50 @@ function url2(){
 
 const handlers = {
     'LaunchRequest': function () {
-        this.emit('HomeAssistQuestions');
+        if(Object.keys(this.attributes).length === 0){
+            this.attributes.healthscores = {
+                'patientID' : 0,
+                'scores': {
+                    'feeling': {
+                        'score': 0
+                    },
+                    'sleeping': {
+                        'score': 0
+                    },
+                    'breathing': {
+                        'score': 0
+                    },
+                    'swollen': {
+                        'score': 0
+                    }
+                },
+    
+            };
+            this.response.speak("Welcome to home assist. Please start by saying I want to input my data").listen("Please start by saying I want to input my data");
+        }
+        else{
+            var patient = this.attributes.healthscores.patientID;
+            var feeling = this.attributes.healthscores.scores['feeling'].score;
+            var sleeping = this.attributes.healthscores.scores['sleeping'].score;
+            var breathing = this.attributes.healthscores.scores['breathing'].score;
+            var swollen = this.attributes.healthscores.scores['swollen'].score;
+
+            //var feeling = this.attrbiutes.healthscores.
+
+            this.response.speak("Welcome back to home assist patient " + patient + 
+            ". Your feeling score is currently " + feeling + 
+            ". Your sleeping score is currently " + sleeping + 
+            ". Your breathing score is currently " + breathing + 
+            " . Your swollen score is currently " + swollen + ". Which score would you like to update?").listen("Which score would you like to update?");
+            
+        }
+        this.emit(':responseReady');
+
+
+        //this.emit('HomeAssistQuestions');
+        //this.emitWithState("HomeAssistQuestions");
     },
     'HomeAssistQuestions': function () {
-        this.attributes.healthscores = {
-            'patientID' : 0,
-            'scores': {
-                'feeling': {
-                    'score': 0
-                },
-                'sleeping': {
-                    'score': 0
-                },
-                'breathing': {
-                    'score': 0
-                },
-                'swollen': {
-                    'score': 0
-                }
-            },
-
-        };
-
-        
-        
         if(this.event.request.dialogState !== 'COMPLETED'){
             this.emit(':delegate');
         }
@@ -186,10 +206,11 @@ const handlers = {
         var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
         if(this.event.request.dialogState !== 'COMPLETED'){
-                let prompt = "Sorry I didn't hear rating for your swollen rating or you didnt't give me a number from one to ten";
+            if (this.event.request.intent.slots.breathingRating.value == '?' || this.event.request.intent.slots.SwollenRating.value < 1 || this.event.request.intent.slots.SwollenRating.value > 10) {
+                let prompt = "Sorry I didn't hear your swollen rating or you didnt't give me a number from one to ten";
                 let reprompt = "Tell me how you feel from one to ten";
                 this.emit(':elicitSlot', 'SwollenRating', prompt, reprompt); 
-            }
+            } 
             else{
                 this.emit(':delegate');
             }
@@ -207,7 +228,25 @@ const handlers = {
             this.emit(':responseReady');
         }
     },
-
+    'UpdateIntent': function(){
+        if(this.event.request.intent.slots.value.value == "feeling"){
+            this.response.speak("Feeling selected");
+            this.emit(":responseReady");
+            //this.emitWithState("FeelingQuestions");
+        }
+        else if(this.event.request.intent.slots.value.value == "sleeping"){
+            this.response.speak("sleeping selected");
+            this.emit(":responseReady");
+        }
+        else if(this.event.request.intent.slots.value.value == "breathing"){
+            this.response.speak("breathing selected");
+            this.emit(":responseReady");
+        }
+        else if(this.event.request.intent.slots.value.value == "swollen"){
+            this.response.speak("swollen selected");
+            this.emit(":responseReady");
+        }
+    },
     'AMAZON.HelpIntent': function () {
         const speechOutput = HELP_MESSAGE;
         const reprompt = HELP_REPROMPT;
