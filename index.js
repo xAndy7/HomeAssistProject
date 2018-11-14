@@ -96,7 +96,14 @@ const handlers = {
         var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
         if(this.event.request.dialogState !== 'COMPLETED'){
-            this.emit(':delegate');
+            if (this.event.request.intent.slots.feelingRating.value == '?' || this.event.request.intent.slots.feelingRating.value < 1 || this.event.request.intent.slots.feelingRating.value > 10) { 
+                let prompt = "Sorry I didn't hear rating for how you feel or you didnt't give me a number from one to ten";
+                let reprompt = "Tell me how you feel from one to ten";
+                this.emit(':elicitSlot', 'feelingRating', prompt, reprompt); 
+            } 
+            else{
+                this.emit(':delegate');
+            }
         }
         else{
             const feelingScore = this.event.request.intent.slots.feelingRating.value;
@@ -120,7 +127,14 @@ const handlers = {
         var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
         if(this.event.request.dialogState !== 'COMPLETED'){
-            this.emit(':delegate');
+            if (this.event.request.intent.slots.sleepingRating.value == '?' || this.event.request.intent.slots.sleepingRating.value < 1 || this.event.request.intent.slots.sleepingRating.value > 10) {
+                let prompt = "Sorry I didn't hear your rating for your sleeping score or you didnt't give me a number from one to ten";
+                let reprompt = "Tell me how you feel from one to ten";
+                this.emit(':elicitSlot', 'sleepingRating', prompt, reprompt);
+            } 
+            else{
+                this.emit(':delegate');
+            }
         }
         else{
             const sleepingScore = this.event.request.intent.slots.sleepingRating.value;
@@ -142,7 +156,14 @@ const handlers = {
         var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
         if(this.event.request.dialogState !== 'COMPLETED'){
-            this.emit(':delegate');
+            if (this.event.request.intent.slots.breathingRating.value == '?' || this.event.request.intent.slots.breathingRating.value < 1 || this.event.request.intent.slots.breathingRating.value > 10) {
+                let prompt = "Sorry I didn't hear your breathing rating or you didnt't give me a number from one to ten";
+                let reprompt = "Tell me how you feel from one to ten";
+                this.emit(':elicitSlot', 'breathingRating', prompt, reprompt); 
+            } 
+            else{
+                this.emit(':delegate');
+            }
         }
         else{
             const breathingScore = this.event.request.intent.slots.breathingRating.value;
@@ -165,7 +186,13 @@ const handlers = {
         var swollen_attr = this.attributes.healthscores.scores['swollen'].score;
 
         if(this.event.request.dialogState !== 'COMPLETED'){
-            this.emit(':delegate');
+                let prompt = "Sorry I didn't hear rating for your swollen rating or you didnt't give me a number from one to ten";
+                let reprompt = "Tell me how you feel from one to ten";
+                this.emit(':elicitSlot', 'SwollenRating', prompt, reprompt); 
+            }
+            else{
+                this.emit(':delegate');
+            }
         }
         else{
             const swollenScore = this.event.request.intent.slots.SwollenRating.value;
